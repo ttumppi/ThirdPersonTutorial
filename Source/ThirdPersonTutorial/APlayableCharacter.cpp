@@ -117,10 +117,10 @@ void AAPlayableCharacter::UpdateCameraRotation() {
 	
 	DebugFunctions::PrintMessage(4, FColor::Yellow, "camera input y : " + std::to_string(_cameraXYRotation.GetY()));*/
 
-	DebugFunctions::PrintMessage(3, FColor::Red, "Camera arm rotation : " + 
+	/*DebugFunctions::PrintMessage(3, FColor::Red, "Camera arm rotation : " + 
 		std::string(TCHAR_TO_UTF8(*CameraBoom->GetRelativeRotation().ToString())));
 
-	DebugFunctions::PrintMessage(4, FColor::Red, "camera arm y value: " + std::to_string(_cameraArmXYRotation.GetY()));
+	DebugFunctions::PrintMessage(4, FColor::Red, "camera arm y value: " + std::to_string(_cameraArmXYRotation.GetY()));*/
 }
 
 void AAPlayableCharacter::BindInputs() {
@@ -185,16 +185,17 @@ void AAPlayableCharacter::SetMesh() {
 }
 
 void AAPlayableCharacter::SetStartPositionForCamera() {
-	FRotator wat = FollowCamera->GetRelativeRotation();
 
-	DebugFunctions::PrintMessage(10, FColor::Red, "pitch before change :" + std::to_string(wat.Pitch));
+	FRotator cameraRelativeRotation = FollowCamera->GetRelativeRotation();
+
+	//DebugFunctions::PrintMessage(10, FColor::Red, "pitch before change :" + std::to_string(wat.Pitch));
 
 
 	FollowCamera->SetRelativeRotation(FRotator(20.0f, 15.0f, 0.0f));
 
-	wat = FollowCamera->GetRelativeRotation();
+	cameraRelativeRotation = FollowCamera->GetRelativeRotation();
 
-	DebugFunctions::PrintMessage(11, FColor::Red, "pitch after change :" + std::to_string(wat.Pitch));
+	//DebugFunctions::PrintMessage(11, FColor::Red, "pitch after change :" + std::to_string(wat.Pitch));
 
 	FRotator cameraRotation = FollowCamera->GetComponentRotation();
 
