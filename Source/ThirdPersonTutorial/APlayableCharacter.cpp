@@ -11,13 +11,14 @@
 
 // Sets default values
 AAPlayableCharacter::AAPlayableCharacter()
+	: _characterXYMovement(0,0)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	SetupCamera();
 	
-	_characterXYMovement = FVector2D(0, 0);
+	
 
 	SetMesh();
 }
