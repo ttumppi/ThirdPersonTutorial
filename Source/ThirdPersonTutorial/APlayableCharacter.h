@@ -39,10 +39,13 @@ public:
 
 private:
 
+	//Field for camera rotation, updated from inputs and read by character tick
 	Vector2DWithMinMax _cameraXYRotation;
 
+	//Field for camera arm rotation, updated from inputs and read by character tick
 	Vector2DWithMinMax _cameraArmXYRotation;
 
+	//Field for character placement, updated from inputs and read by character tick
 	FVector2D _characterXYMovement;
 
 	void SetupCamera();
