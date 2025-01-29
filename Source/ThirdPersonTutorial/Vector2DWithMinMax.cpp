@@ -1,6 +1,7 @@
 #include "Vector2DWithMinMax.h"
 #include "MinMaxSpan.h"
 #include "vector"
+#include "GlobalMutexFunctions.h"
 
 
 Vector2DWithMinMax::Vector2DWithMinMax(double x, double y, const std::vector<MinMaxSpan>& spanX, const std::vector<MinMaxSpan>& spanY) {
@@ -30,7 +31,7 @@ double Vector2DWithMinMax::GetY() const {
 bool Vector2DWithMinMax::SetX(double value) {
 
 	if (_spanX.size() == 0) {
-		_x = value;
+		GlobalMutexFunctions::SetValueThreadSafely(_lockForX, _x, value);
 		return true;
 	}
 
@@ -41,7 +42,7 @@ bool Vector2DWithMinMax::SetX(double value) {
 	}
 	
 
-	_x = value;
+	GlobalMutexFunctions::SetValueThreadSafely(_lockForX, _x, value);
 	
 	return true;
 
@@ -50,7 +51,7 @@ bool Vector2DWithMinMax::SetX(double value) {
 bool Vector2DWithMinMax::SetY(double value) {
 
 	if (_spanY.size() == 0) {
-		_y = value;
+		GlobalMutexFunctions::SetValueThreadSafely(_lockForY, _y, value);
 		return true;
 	}
 
@@ -62,7 +63,7 @@ bool Vector2DWithMinMax::SetY(double value) {
 		}
 	}
 
-	_y = value;
+	GlobalMutexFunctions::SetValueThreadSafely(_lockForY, _y, value);
 
 	return true;
 }

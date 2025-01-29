@@ -2,6 +2,8 @@
 
 #include "MinMaxSpan.h"
 #include "vector"
+#include "mutex"
+
 /**
 * Capsulates xy doubles and has optional checks for min and max for both values.
 * if min or max lists are empty, does not include value set checks.
@@ -27,6 +29,10 @@ private:
 	std::vector<MinMaxSpan> _spanX;
 
 	std::vector<MinMaxSpan> _spanY;
+
+	std::mutex _lockForX;
+	
+	std::mutex _lockForY;
 
 	double _x;
 

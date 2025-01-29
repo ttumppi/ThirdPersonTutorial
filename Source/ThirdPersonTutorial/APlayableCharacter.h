@@ -19,6 +19,8 @@ class THIRDPERSONTUTORIAL_API AAPlayableCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AAPlayableCharacter();
+	virtual ~AAPlayableCharacter() noexcept;
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -40,10 +42,10 @@ public:
 private:
 
 	//Field for camera rotation, updated from inputs and read by character tick
-	Vector2DWithMinMax _cameraXYRotation;
+	Vector2DWithMinMax* _cameraXYRotation;
 
 	//Field for camera arm rotation, updated from inputs and read by character tick
-	Vector2DWithMinMax _cameraArmXYRotation;
+	Vector2DWithMinMax* _cameraArmXYRotation;
 
 	//Field for character placement, updated from inputs and read by character tick
 	FVector2D _characterXYMovement;
@@ -73,5 +75,7 @@ private:
 	void SetMesh();
 
 	void SetStartPositionForCamera();
+
+	
 
 };

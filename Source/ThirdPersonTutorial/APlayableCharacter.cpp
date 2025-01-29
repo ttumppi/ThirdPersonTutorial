@@ -90,13 +90,13 @@ void AAPlayableCharacter::SetupCamera() {
 
 
 void AAPlayableCharacter::PitchCamera(float inputValue) {
-	_cameraXYRotation.SetX(_cameraXYRotation.GetX() + inputValue);
+	_cameraXYRotation->SetX(_cameraXYRotation->GetX() + inputValue);
 }
 
 void AAPlayableCharacter::YawCamera(float inputValue) {
-	_cameraXYRotation.SetY(_cameraXYRotation.GetY() + inputValue);
+	_cameraXYRotation->SetY(_cameraXYRotation->GetY() + inputValue);
 
-	_cameraArmXYRotation.SetY((_cameraArmXYRotation.GetY() + (inputValue * 1.5f)));
+	_cameraArmXYRotation->SetY((_cameraArmXYRotation->GetY() + (inputValue * 1.5f)));
 }
 
 void AAPlayableCharacter::UpdateCameraRotation() {
@@ -105,13 +105,13 @@ void AAPlayableCharacter::UpdateCameraRotation() {
 
 	FRotator cameraBoomRotation = CameraBoom->GetRelativeRotation();
 
-	FollowCamera->SetRelativeRotation(FRotator(_cameraXYRotation.GetY(), cameraRotation.Yaw, cameraRotation.Roll));
+	FollowCamera->SetRelativeRotation(FRotator(_cameraXYRotation->GetY(), cameraRotation.Yaw, cameraRotation.Roll));
 
 	cameraRotation = FollowCamera->GetComponentRotation();
 
 	FollowCamera->SetWorldRotation(FRotator(cameraRotation.Pitch, cameraRotation.Yaw, 0.0f));
 
-	CameraBoom->SetRelativeRotation(FRotator(_cameraArmXYRotation.GetY(), _cameraXYRotation.GetX(), cameraBoomRotation.Roll));
+	CameraBoom->SetRelativeRotation(FRotator(_cameraArmXYRotation->GetY(), _cameraXYRotation->GetX(), cameraBoomRotation.Roll));
 	 
 	/*DebugFunctions::PrintMessage(3, FColor::Red, "Camera rotation : " + 
 	std::string(TCHAR_TO_UTF8(*FollowCamera->GetRelativeRotation().ToString())));
@@ -164,7 +164,7 @@ void AAPlayableCharacter::UpdateCharacterPositionByMovement() {
 }
 
 void AAPlayableCharacter::RotateCharacter() {
-	SetActorRotation(FRotator(0.0f, _cameraXYRotation.GetX() + 15, 0.0f));
+	SetActorRotation(FRotator(0.0f, _cameraXYRotation->GetX() + 15, 0.0f));
 }
 
 void AAPlayableCharacter::SetMesh() {
@@ -214,9 +214,15 @@ void AAPlayableCharacter::SetStartPositionForCamera() {
 
 	std::vector<MinMaxSpan> cameraArmLimits = { MinMaxSpan(-40.0f, 30.0f) };
 
-	_cameraXYRotation = Vector2DWithMinMax(currentCameraRotation.Yaw, currentCameraRotation.Pitch, cameraPitchLimits, cameraYawLimits);
 
-	_cameraArmXYRotation = Vector2DWithMinMax(currentCameraBoomRotation.Yaw, currentCameraBoomRotation.Pitch,
+	_cameraXYRotation = new Vector2DWithMinMax(currentCameraRotation.Yaw, currentCameraRotation.Pitch, cameraPitchLimits, cameraYawLimits);
+
+	_cameraArmXYRotation = new Vector2DWithMinMax(currentCameraBoomRotation.Yaw, currentCameraBoomRotation.Pitch,
 		std::vector<MinMaxSpan>(), cameraArmLimits);
 
+}
+
+AAPlayableCharacter::~AAPlayableCharacter() noexcept{
+	delete _cameraXYRotation;
+	delete _cameraArmXYRotation;
 }
