@@ -13,5 +13,10 @@ static class THIRDPERSONTUTORIAL_API GlobalMutexFunctions
 public:
 
 	template<typename T>
-	static void SetValueThreadSafely(std::mutex& lock, T& valueToAssignTo, T& valueToAssign);
+	static void SetValueThreadSafely(std::mutex& lock, T& valueToAssignTo, T& valueToAssign) {
+		lock.lock();
+		valueToAssignTo = valueToAssign;
+		lock.unlock();
+	}
+
 };
