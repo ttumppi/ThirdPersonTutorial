@@ -11,7 +11,7 @@
 
 // Sets default values
 AAPlayableCharacter::AAPlayableCharacter()
-	: _characterXYMovement(0,0)
+	: _characterXYMovement(0, 0, std::vector<MinMaxSpan>(), std::vector<MinMaxSpan>())
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -135,30 +135,30 @@ void AAPlayableCharacter::BindInputs() {
 }
 
 void AAPlayableCharacter::MoveForwardInput(float inputValue) {
-	_characterXYMovement.X -= inputValue;
+	_characterXYMovement.SetX(_characterXYMovement.GetX() - inputValue);
 }
 
 void AAPlayableCharacter::MoveBackwardsInput(float inputValue) {
-	_characterXYMovement.X += inputValue;
+	_characterXYMovement.SetX(_characterXYMovement.GetX() + inputValue);
 }
 
 void AAPlayableCharacter::MoveRightInput(float inputValue) {
-	_characterXYMovement.Y -= inputValue;
+	_characterXYMovement.SetY(_characterXYMovement.GetY() - inputValue);
 }
 
 void AAPlayableCharacter::MoveLeftInput(float inputValue) {
-	_characterXYMovement.Y += inputValue;
+	_characterXYMovement.SetY(_characterXYMovement.GetY() + inputValue);
 }
 
 void AAPlayableCharacter::UpdateCharacterPositionByMovement() {
 
 	FVector currentPosition = GetActorLocation();
 
-	currentPosition.Y += _characterXYMovement.Y;
-	_characterXYMovement.Y = 0;
+	currentPosition.Y += _characterXYMovement.GetY();
+	_characterXYMovement.SetY(0);
 
-	currentPosition.X += _characterXYMovement.X;
-	_characterXYMovement.X = 0;
+	currentPosition.X += _characterXYMovement.GetX();
+	_characterXYMovement.SetX(0);
 
 	SetActorLocation(currentPosition);
 }

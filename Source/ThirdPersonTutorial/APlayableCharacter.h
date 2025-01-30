@@ -48,7 +48,7 @@ private:
 	Vector2DWithMinMax* _cameraArmXYRotation;
 
 	//Field for character placement, updated from inputs and read by character tick
-	FVector2D _characterXYMovement;
+	Vector2DWithMinMax _characterXYMovement;
 
 	void SetupCamera();
 
