@@ -80,3 +80,7 @@ bool Vector2DWithMinMax::SetY(double value) {
 
 	return true;
 }
+
+FVector2D Vector2DWithMinMax::GetCoordinatesAsFVector2D() {
+	return FVector2D(GetX(), GetY());
+}

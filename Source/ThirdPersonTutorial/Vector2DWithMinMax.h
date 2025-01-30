@@ -24,6 +24,7 @@ public:
 	/** Set y coordinate and possibly include min max check */
 	bool SetY(double value);
 	
+	FVector2D GetCoordinatesAsFVector2D();
 
 private:
 	std::vector<MinMaxSpan> _spanX;
