@@ -20,12 +20,25 @@ Vector2DWithMinMax::Vector2DWithMinMax() {
 	_spanY = std::vector<MinMaxSpan>();
 }
 
-double Vector2DWithMinMax::GetX() const {
-	return _x;
+double Vector2DWithMinMax::GetX() {
+	_lockForX.lock();
+
+	double currentX = _x;
+
+	_lockForX.unlock();
+
+	return currentX;
 }
 
-double Vector2DWithMinMax::GetY() const {
-	return _y;
+double Vector2DWithMinMax::GetY() {
+
+	_lockForY.lock();
+
+	double currentY = _y;
+
+	_lockForY.unlock();
+
+	return currentY;
 }
 
 bool Vector2DWithMinMax::SetX(double value) {

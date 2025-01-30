@@ -15,8 +15,8 @@ public:
 
 	Vector2DWithMinMax();
 
-	double GetX() const;
-	double GetY() const;
+	double GetX();
+	double GetY();
 
 	/** Set x coordinate and possibly include min max check */
 	bool SetX(double value);
