@@ -50,6 +50,9 @@ private:
 	//Field for character placement, updated from inputs and read by character tick
 	Vector2DWithMinMax _characterXYMovement;
 
+	const float _forwardMovScale = 3.0f;
+	const float _sidewaysMovScale = 2.0f;
+
 	void SetupCamera();
 
 	void PitchCamera(float inputValue);

@@ -135,32 +135,63 @@ void AAPlayableCharacter::BindInputs() {
 }
 
 void AAPlayableCharacter::MoveForwardInput(float inputValue) {
-	_characterXYMovement.SetX(_characterXYMovement.GetX() - inputValue);
+	_characterXYMovement.SetY(_characterXYMovement.GetY() + inputValue);
 }
 
 void AAPlayableCharacter::MoveBackwardsInput(float inputValue) {
-	_characterXYMovement.SetX(_characterXYMovement.GetX() + inputValue);
-}
-
-void AAPlayableCharacter::MoveRightInput(float inputValue) {
 	_characterXYMovement.SetY(_characterXYMovement.GetY() - inputValue);
 }
 
+void AAPlayableCharacter::MoveRightInput(float inputValue) {
+	_characterXYMovement.SetX(_characterXYMovement.GetX() - inputValue);
+}
+
 void AAPlayableCharacter::MoveLeftInput(float inputValue) {
-	_characterXYMovement.SetY(_characterXYMovement.GetY() + inputValue);
+	_characterXYMovement.SetX(_characterXYMovement.GetX() + inputValue);
 }
 
 void AAPlayableCharacter::UpdateCharacterPositionByMovement() {
 
-	FVector currentPosition = GetActorLocation();
+	if (_characterXYMovement.GetX() == 0.0f && _characterXYMovement.GetY() == 0.0f) {
+		return;
+	}
 
-	currentPosition.Y += _characterXYMovement.GetY();
-	_characterXYMovement.SetY(0);
+	FVector facingDirection = GetActorForwardVector();
 
-	currentPosition.X += _characterXYMovement.GetX();
-	_characterXYMovement.SetX(0);
+	DebugFunctions::PrintMessage(4, FColor::Red, "Movement X : " + std::to_string(_characterXYMovement.GetX()) + "Movement Y : " + std::to_string(_characterXYMovement.GetY()));
 
-	SetActorLocation(currentPosition);
+	DebugFunctions::PrintMessage(10, FColor::Red, "facingDirection Y : " + std::to_string(facingDirection.Y));
+
+
+	DebugFunctions::PrintMessage(12, FColor::Red, "facingDirection X : " + std::to_string(facingDirection.X));
+
+
+
+	
+
+	
+		
+
+		
+
+
+
+	AddActorWorldOffset(FVector(facingDirection.X * _characterXYMovement.GetX() * _forwardMovScale,
+		facingDirection.Y * _characterXYMovement.GetY() * _forwardMovScale, 0.0f)); // forward backwards movement
+		
+
+	
+
+	
+
+	
+
+	_characterXYMovement.SetX(_characterXYMovement.GetX() - 1);
+
+	_characterXYMovement.SetY(_characterXYMovement.GetY() - 1);
+	
+
+	
 }
 
 void AAPlayableCharacter::RotateCharacter() {
