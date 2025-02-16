@@ -5,7 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Vector2DWithMinMax.h"
+#include "TSQueue.h"
+#include "MovementDirections.h"
+
 #include "APlayableCharacter.generated.h"
+
 
 
 class USpringArmComponent;
@@ -47,11 +51,15 @@ private:
 	//Field for camera arm rotation, updated from inputs and read by character tick
 	Vector2DWithMinMax* _cameraArmXYRotation;
 
-	//Field for character placement, updated from inputs and read by character tick
-	Vector2DWithMinMax _characterXYMovement;
+	
 
 	const float _forwardMovScale = 3.0f;
 	const float _sidewaysMovScale = 2.0f;
+
+	//Holds all movement inputs for the character
+	TSQueue<MovementDirection> _movementQueue;
+
+
 
 	void SetupCamera();
 
@@ -78,6 +86,14 @@ private:
 	void SetMesh();
 
 	void SetStartPositionForCamera();
+
+	void MoveRight();
+
+	void MoveLeft();
+
+	void MoveForward();
+
+	void MoveBackwards();
 
 	
 

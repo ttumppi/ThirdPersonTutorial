@@ -3,10 +3,3 @@
 
 #include "TSQueue.h"
 
-TSQueue::TSQueue()
-{
-}
-
-TSQueue::~TSQueue()
-{
-}

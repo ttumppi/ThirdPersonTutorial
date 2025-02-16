@@ -14,7 +14,9 @@ template<typename T>
 class THIRDPERSONTUTORIAL_API TSQueue
 {
 public:
-	TSQueue();
+	TSQueue() {
+
+	}
 	
 	void Enqueue(T* item) {
 		_queueLock.lock();
@@ -43,6 +45,6 @@ public:
 
 
 private:
-	std::queue<T> _items;
+	std::queue<T*> _items;
 	std::mutex _queueLock;
 };

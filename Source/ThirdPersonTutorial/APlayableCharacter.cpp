@@ -11,7 +11,6 @@
 
 // Sets default values
 AAPlayableCharacter::AAPlayableCharacter()
-	: _characterXYMovement(0, 0, std::vector<MinMaxSpan>(), std::vector<MinMaxSpan>())
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -113,15 +112,7 @@ void AAPlayableCharacter::UpdateCameraRotation() {
 
 	CameraBoom->SetRelativeRotation(FRotator(_cameraArmXYRotation->GetY(), _cameraXYRotation->GetX(), cameraBoomRotation.Roll));
 	 
-	/*DebugFunctions::PrintMessage(3, FColor::Red, "Camera rotation : " + 
-	std::string(TCHAR_TO_UTF8(*FollowCamera->GetRelativeRotation().ToString())));
 	
-	DebugFunctions::PrintMessage(4, FColor::Yellow, "camera input y : " + std::to_string(_cameraXYRotation.GetY()));*/
-
-	/*DebugFunctions::PrintMessage(3, FColor::Red, "Camera arm rotation : " + 
-		std::string(TCHAR_TO_UTF8(*CameraBoom->GetRelativeRotation().ToString())));
-
-	DebugFunctions::PrintMessage(4, FColor::Red, "camera arm y value: " + std::to_string(_cameraArmXYRotation.GetY()));*/
 }
 
 void AAPlayableCharacter::BindInputs() {
@@ -135,62 +126,100 @@ void AAPlayableCharacter::BindInputs() {
 }
 
 void AAPlayableCharacter::MoveForwardInput(float inputValue) {
-	_characterXYMovement.SetY(_characterXYMovement.GetY() + inputValue);
+
+	if (inputValue == 0.0f) {
+		return;
+	}
+
+	MovementDirection* input = new MovementDirection(MovementDirection::MoveForward);
+
+	_movementQueue.Enqueue(input);
+
 }
 
 void AAPlayableCharacter::MoveBackwardsInput(float inputValue) {
-	_characterXYMovement.SetY(_characterXYMovement.GetY() - inputValue);
+
+	if (inputValue == 0.0f) {
+		return;
+	}
+
+	MovementDirection* input = new MovementDirection(MovementDirection::MoveBackwards);
+
+	_movementQueue.Enqueue(input);
+
 }
 
 void AAPlayableCharacter::MoveRightInput(float inputValue) {
-	_characterXYMovement.SetX(_characterXYMovement.GetX() - inputValue);
+
+	if (inputValue == 0.0f) {
+		return;
+	}
+
+	MovementDirection* input = new MovementDirection(MovementDirection::MoveRight);
+
+	_movementQueue.Enqueue(input);
+
 }
 
 void AAPlayableCharacter::MoveLeftInput(float inputValue) {
-	_characterXYMovement.SetX(_characterXYMovement.GetX() + inputValue);
+
+	if (inputValue == 0.0f) {
+		return;
+	}
+
+	MovementDirection* input = new MovementDirection(MovementDirection::MoveLeft);
+
+	_movementQueue.Enqueue(input);
+
 }
 
 void AAPlayableCharacter::UpdateCharacterPositionByMovement() {
 
-	if (_characterXYMovement.GetX() == 0.0f && _characterXYMovement.GetY() == 0.0f) {
+	
+	if (_movementQueue.Count() <= 0) {
 		return;
 	}
 
 	FVector facingDirection = GetActorForwardVector();
 
-	DebugFunctions::PrintMessage(4, FColor::Red, "Movement X : " + std::to_string(_characterXYMovement.GetX()) + "Movement Y : " + std::to_string(_characterXYMovement.GetY()));
 
 	DebugFunctions::PrintMessage(10, FColor::Red, "facingDirection Y : " + std::to_string(facingDirection.Y));
 
 
 	DebugFunctions::PrintMessage(12, FColor::Red, "facingDirection X : " + std::to_string(facingDirection.X));
 
-
-
-	
-
-	
+	MovementDirection* movementAction = _movementQueue.Dequeue();
 		
+	switch (*movementAction) {
 
+	case MovementDirection::MoveForward: // Do nothing, already facing forwards.
+		break;
+
+	case MovementDirection::MoveBackwards:
+		facingDirection.X -= 0.90f;
+		//facingDirection.Y -= 0.90f;
+		break;
+
+	case MovementDirection::MoveLeft:
+
+		break;
+
+	case MovementDirection::MoveRight:
+
+		break;
+
+	default:
+		DebugFunctions::PrintMessage(11, FColor::Red, "Unrecognised movement input handled");
+		break;
+	}
+
+
+	AddActorWorldOffset(FVector(facingDirection.X * _forwardMovScale,
+		facingDirection.Y * _forwardMovScale, 0.0f)); 
 		
-
-
-
-	AddActorWorldOffset(FVector(facingDirection.X * _characterXYMovement.GetX() * _forwardMovScale,
-		facingDirection.Y * _characterXYMovement.GetY() * _forwardMovScale, 0.0f)); // forward backwards movement
-		
-
+	delete movementAction;
 	
-
-	
-
-	
-
-	_characterXYMovement.SetX(_characterXYMovement.GetX() - 1);
-
-	_characterXYMovement.SetY(_characterXYMovement.GetY() - 1);
-	
-
+	movementAction = nullptr;
 	
 }
 
@@ -250,6 +279,22 @@ void AAPlayableCharacter::SetStartPositionForCamera() {
 
 	_cameraArmXYRotation = new Vector2DWithMinMax(currentCameraBoomRotation.Yaw, currentCameraBoomRotation.Pitch,
 		std::vector<MinMaxSpan>(), cameraArmLimits);
+
+}
+
+void AAPlayableCharacter::MoveRight() {
+
+}
+
+void AAPlayableCharacter::MoveLeft() {
+
+}
+
+void AAPlayableCharacter::MoveForward() {
+
+}
+
+void AAPlayableCharacter::MoveBackwards() {
 
 }
 
