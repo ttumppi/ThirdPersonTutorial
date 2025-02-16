@@ -196,16 +196,18 @@ void AAPlayableCharacter::UpdateCharacterPositionByMovement() {
 		break;
 
 	case MovementDirection::MoveBackwards:
-		facingDirection.X -= 0.90f;
-		//facingDirection.Y -= 0.90f;
+		facingDirection.X = facingDirection.X * -1.0f;
+		facingDirection.Y = facingDirection.Y * -1.0f;
 		break;
 
 	case MovementDirection::MoveLeft:
-
+		facingDirection.X -= 0.9f;
+		facingDirection.Y -= 0.9f;
 		break;
 
 	case MovementDirection::MoveRight:
-
+		facingDirection.X += 0.9f;
+		facingDirection.Y += 0.9f;
 		break;
 
 	default:
