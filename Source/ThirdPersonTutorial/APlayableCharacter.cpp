@@ -201,13 +201,13 @@ void AAPlayableCharacter::UpdateCharacterPositionByMovement() {
 		break;
 
 	case MovementDirection::MoveLeft:
-		facingDirection.X -= 0.9f;
-		facingDirection.Y -= 0.9f;
+		std::swap(facingDirection.X, facingDirection.Y);
+		facingDirection.Y = facingDirection.Y * -1.0f;
 		break;
 
 	case MovementDirection::MoveRight:
-		facingDirection.X += 0.9f;
-		facingDirection.Y += 0.9f;
+		std::swap(facingDirection.X, facingDirection.Y);
+		facingDirection.X = facingDirection.X * -1.0f;
 		break;
 
 	default:
