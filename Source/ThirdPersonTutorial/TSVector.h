@@ -7,7 +7,7 @@ template <typename T>
 class TSVector {
 public:
 
-	TSVector TSVector(){}
+	TSVector(){}
 
 	void Append(T* item) {
 		_lock.lock();

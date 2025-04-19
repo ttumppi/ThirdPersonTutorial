@@ -188,6 +188,8 @@ void AAPlayableCharacter::UpdateCharacterPositionByMovement() {
 
 	DebugFunctions::PrintMessage(12, FColor::Red, "facingDirection X : " + std::to_string(facingDirection.X));
 
+	DebugFunctions::PrintMessage(13, FColor::Red, "WHAT");
+
 	std::vector<MovementDirection*>* movementActions = _movementActions.GetItems();
 
 	for (std::vector<MovementDirection*>::const_iterator iterator = movementActions->begin(); iterator != movementActions->end(); iterator++) {
