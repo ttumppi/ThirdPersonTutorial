@@ -8,6 +8,7 @@
 #include "TSQueue.h"
 #include "MovementDirections.h"
 #include "vector"
+#include "TSVector.h"
 
 #include "APlayableCharacter.generated.h"
 
@@ -60,7 +61,7 @@ private:
 	//Holds all movement inputs for the character
 	//TSQueue<MovementDirection> _movementQueue; This one limits movement input reading to one per tick. as is.
 
-	std::vector<MovementDirection*> _movementActions;
+	TSVector<MovementDirection> _movementActions;
 	
 
 

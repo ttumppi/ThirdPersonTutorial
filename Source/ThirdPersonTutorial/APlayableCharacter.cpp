@@ -133,7 +133,7 @@ void AAPlayableCharacter::MoveForwardInput(float inputValue) {
 
 	MovementDirection* input = new MovementDirection(MovementDirection::MoveForward);
 
-	_movementQueue.Enqueue(input);
+	_movementActions.Append(input);
 
 }
 
@@ -145,7 +145,7 @@ void AAPlayableCharacter::MoveBackwardsInput(float inputValue) {
 
 	MovementDirection* input = new MovementDirection(MovementDirection::MoveBackwards);
 
-	_movementQueue.Enqueue(input);
+	_movementActions.Append(input);
 
 }
 
@@ -157,7 +157,7 @@ void AAPlayableCharacter::MoveRightInput(float inputValue) {
 
 	MovementDirection* input = new MovementDirection(MovementDirection::MoveRight);
 
-	_movementQueue.Enqueue(input);
+	_movementActions.Append(input);
 
 }
 
@@ -169,14 +169,14 @@ void AAPlayableCharacter::MoveLeftInput(float inputValue) {
 
 	MovementDirection* input = new MovementDirection(MovementDirection::MoveLeft);
 
-	_movementQueue.Enqueue(input);
+	_movementActions.Append(input);
 
 }
 
 void AAPlayableCharacter::UpdateCharacterPositionByMovement() {
 
 	
-	if (_movementQueue.Count() <= 0) {
+	if (_movementActions.Size() <= 0) {
 		return;
 	}
 
@@ -188,40 +188,49 @@ void AAPlayableCharacter::UpdateCharacterPositionByMovement() {
 
 	DebugFunctions::PrintMessage(12, FColor::Red, "facingDirection X : " + std::to_string(facingDirection.X));
 
-	MovementDirection* movementAction = _movementQueue.Dequeue();
-		
-	switch (*movementAction) {
+	std::vector<MovementDirection*>* movementActions = _movementActions.GetItems();
 
-	case MovementDirection::MoveForward: // Do nothing, already facing forwards.
-		break;
+	for (std::vector<MovementDirection*>::const_iterator iterator = movementActions->begin(); iterator != movementActions->end(); iterator++) {
 
-	case MovementDirection::MoveBackwards:
-		facingDirection.X = facingDirection.X * -1.0f;
-		facingDirection.Y = facingDirection.Y * -1.0f;
-		break;
+		MovementDirection* movementAction = *iterator;
 
-	case MovementDirection::MoveLeft:
-		std::swap(facingDirection.X, facingDirection.Y);
-		facingDirection.Y = facingDirection.Y * -1.0f;
-		break;
+		switch (*movementAction) {
 
-	case MovementDirection::MoveRight:
-		std::swap(facingDirection.X, facingDirection.Y);
-		facingDirection.X = facingDirection.X * -1.0f;
-		break;
+		case MovementDirection::MoveForward: // Do nothing, already facing forwards.
+			break;
 
-	default:
-		DebugFunctions::PrintMessage(11, FColor::Red, "Unrecognised movement input handled");
-		break;
+		case MovementDirection::MoveBackwards:
+			facingDirection.X = facingDirection.X * -1.0f;
+			facingDirection.Y = facingDirection.Y * -1.0f;
+			break;
+
+		case MovementDirection::MoveLeft:
+			std::swap(facingDirection.X, facingDirection.Y);
+			facingDirection.Y = facingDirection.Y * -1.0f;
+			break;
+
+		case MovementDirection::MoveRight:
+			std::swap(facingDirection.X, facingDirection.Y);
+			facingDirection.X = facingDirection.X * -1.0f;
+			break;
+
+		default:
+			DebugFunctions::PrintMessage(11, FColor::Red, "Unrecognised movement input handled");
+			break;
+		}
+
+		delete(movementAction);
 	}
+		
+	
 
 
 	AddActorWorldOffset(FVector(facingDirection.X * _forwardMovScale,
 		facingDirection.Y * _forwardMovScale, 0.0f)); 
 		
-	delete movementAction;
+	delete movementActions;
 	
-	movementAction = nullptr;
+	movementActions = nullptr;
 	
 }
 
