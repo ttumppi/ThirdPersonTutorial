@@ -7,6 +7,7 @@
 #include "Vector2DWithMinMax.h"
 #include "TSQueue.h"
 #include "MovementDirections.h"
+#include "vector"
 
 #include "APlayableCharacter.generated.h"
 
@@ -57,7 +58,10 @@ private:
 	const float _sidewaysMovScale = 2.0f;
 
 	//Holds all movement inputs for the character
-	TSQueue<MovementDirection> _movementQueue;
+	//TSQueue<MovementDirection> _movementQueue; This one limits movement input reading to one per tick. as is.
+
+	std::vector<MovementDirection*> _movementActions;
+	
 
 
 
