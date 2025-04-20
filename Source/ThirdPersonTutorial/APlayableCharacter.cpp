@@ -182,44 +182,85 @@ void AAPlayableCharacter::UpdateCharacterPositionByMovement() {
 
 	FVector facingDirection = GetActorForwardVector();
 
+	FVector forward = facingDirection;
 
-	DebugFunctions::PrintMessage(10, FColor::Red, "facingDirection Y : " + std::to_string(facingDirection.Y));
+	FVector right = FVector(-facingDirection.Y, facingDirection.X, facingDirection.Z);
+
+	FVector backwards = FVector(-right.Y, right.X, facingDirection.Z);
+
+	FVector left = FVector(-backwards.Y, backwards.X, facingDirection.Z);
 
 
-	DebugFunctions::PrintMessage(12, FColor::Red, "facingDirection X : " + std::to_string(facingDirection.X));
 
-	DebugFunctions::PrintMessage(13, FColor::Red, "WHAT");
 
 	std::vector<MovementDirection*>* movementActions = _movementActions.GetItems();
+
+	bool firstInput = true;
 
 	for (std::vector<MovementDirection*>::const_iterator iterator = movementActions->begin(); iterator != movementActions->end(); iterator++) {
 
 		MovementDirection* movementAction = *iterator;
 
-		switch (*movementAction) {
+		if (firstInput) {
+			switch (*movementAction) {
 
-		case MovementDirection::MoveForward: // Do nothing, already facing forwards.
-			break;
+			case MovementDirection::MoveForward: // Do nothing, already facing forwards.
+				break;
 
-		case MovementDirection::MoveBackwards:
-			facingDirection.X = facingDirection.X * -1.0f;
-			facingDirection.Y = facingDirection.Y * -1.0f;
-			break;
+			case MovementDirection::MoveBackwards:
+				facingDirection.X = backwards.X;
+				facingDirection.Y = backwards.Y;
+				break;
 
-		case MovementDirection::MoveLeft:
-			std::swap(facingDirection.X, facingDirection.Y);
-			facingDirection.Y = facingDirection.Y * -1.0f;
-			break;
+			case MovementDirection::MoveLeft:
+				facingDirection.X = left.X;
+				facingDirection.Y = left.Y;
+				break;
 
-		case MovementDirection::MoveRight:
-			std::swap(facingDirection.X, facingDirection.Y);
-			facingDirection.X = facingDirection.X * -1.0f;
-			break;
+			case MovementDirection::MoveRight:
+				facingDirection.X = right.X;
+				facingDirection.Y = right.Y;
+				break;
 
-		default:
-			DebugFunctions::PrintMessage(11, FColor::Red, "Unrecognised movement input handled");
-			break;
+			default:
+				DebugFunctions::PrintMessage(11, FColor::Red, "Unrecognised movement input handled");
+				break;
+			}
+
+			firstInput = !firstInput;
 		}
+
+		else {
+
+			switch (*movementAction) {
+
+			case MovementDirection::MoveForward: // Do nothing, already facing forwards.
+				break;
+
+			case MovementDirection::MoveBackwards:
+				facingDirection.X += backwards.X;
+				facingDirection.Y += backwards.Y;
+				break;
+
+			case MovementDirection::MoveLeft:
+				facingDirection.X += left.X;
+				facingDirection.Y += left.Y;
+				break;
+
+			case MovementDirection::MoveRight:
+				facingDirection.X += right.X;
+				facingDirection.Y += right.Y;
+				break;
+
+			default:
+				DebugFunctions::PrintMessage(11, FColor::Red, "Unrecognised movement input handled");
+				break;
+			}
+
+			facingDirection.Normalize();
+		}
+
+		
 
 		delete(movementAction);
 	}
